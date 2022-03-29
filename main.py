@@ -17,11 +17,15 @@ def main():
             print('Для меня от:', event.obj.message['from_id'])
             print('Текст:', event.obj.message['text'])
             vk = vk_session.get_api()
-            if len(set(event.obj.message['text'].split()) & {'время', 'число', 'дата', 'день'}) > 0:
+            if len(set(event.obj.message['text'].lower().split()) & {'время', 'число', 'дата', 'день'}) > 0:
 
                 vk.messages.send(user_id=event.obj.message['from_id'],
                                  message=f"Привет, {vk.users.get(user_id=event.obj.message['from_id'])[0]['first_name']}!\n"
                                          f"Дата: {datetime.datetime.now().date()}\nВремя: {datetime.datetime.now().time().hour}:{datetime.datetime.now().time().minute}:{round(datetime.datetime.now().second)}\nДень недели: {['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'][int(datetime.date.today().weekday())]}",
+                                 random_id=random.randint(0, 2 ** 64))
+            elif 'секрет' in event.obj.message['text'].lower().split():
+                vk.messages.send(user_id=event.obj.message['from_id'],
+                                 message=f"К сожалению вы достигли уровня максимума, передайте привет по номеру №1391",
                                  random_id=random.randint(0, 2 ** 64))
             else:
                 vk.messages.send(user_id=event.obj.message['from_id'],
