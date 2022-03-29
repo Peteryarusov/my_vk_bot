@@ -2,7 +2,14 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import random, datetime
 
+import os
 
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/")
 def main():
     vk_session = vk_api.VkApi(
         token='d0798041eb5ad2530312a6a6c4085d00c1fe872c8ed3db75ada34c9ee51fc5ba2116850164be113065972')
@@ -35,4 +42,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
